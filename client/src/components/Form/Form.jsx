@@ -3,6 +3,8 @@ import { TextField, Button, Typography, Paper } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
 import useStyles from "./styles";
+import { createPost, updatePost } from "../../redux/features/Posts";
+import { createPosts, updatePosts } from "../../api/index";
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
@@ -12,15 +14,45 @@ const Form = ({ currentId, setCurrentId }) => {
     tags: "",
     selectedFile: "",
   });
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((message) => message._id === currentId) : null
+  );
   const classes = useStyles();
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
+
+  const clear = () => {
+    setCurrentId(0);
+    setPostData({
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (currentId === 0) {
+      dispatch(createPost(createPosts));
+      clear();
+    } else {
+      dispatch(updatePost(updatePosts));
+      clear();
+    }
+  };
   return (
     <Paper className={classes.paper}>
       <form
         autoComplete="off"
         noValidate
         className={`${classes.root} ${classes.form}`}
-        onSubmit=""
+        onSubmit={handleSubmit}
       >
         <Typography variant="h6">Creating a Memory</Typography>
         <TextField
@@ -69,7 +101,6 @@ const Form = ({ currentId, setCurrentId }) => {
           />
         </div>
         <Button
-          className={classes.buttonSubmit}
           variant="contained"
           color="primary"
           size="large"
@@ -79,10 +110,11 @@ const Form = ({ currentId, setCurrentId }) => {
           Submit
         </Button>
         <Button
+          sx={{ marginTop: "15px" }}
           variant="contained"
           color="secondary"
           size="small"
-          onClick=""
+          onClick={clear}
           fullWidth
         >
           Clear

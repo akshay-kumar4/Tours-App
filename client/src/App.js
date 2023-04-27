@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Container, AppBar, Typography, Grow, Grid } from "@mui/material";
+import { Container, AppBar, Typography, Grow, Grid, Box } from "@mui/material";
 import memories from "./images/memories.png";
 import useStyles from "./styles";
 import Form from "./components/Form/Form";
@@ -13,10 +13,17 @@ const App = () => {
   return (
     <Container maxWidth="lg">
       <AppBar className={classes.appBar} position="static" color="inherit">
-        <Typography className={classes.heading} variant="h2" align="center">
-          Memories
-        </Typography>
-        <img className={classes.image} src={memories} alt="icon" height="60" />
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography className={classes.heading} variant="h2" align="center">
+            Memories
+          </Typography>
+          <img
+            className={classes.image}
+            src={memories}
+            alt="icon"
+            height="60"
+          />
+        </Box>
       </AppBar>
       <Grow in>
         <Container>
